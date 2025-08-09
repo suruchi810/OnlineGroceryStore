@@ -29,10 +29,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "online-grocery-store-cyan.vercel.app"
+    ".vercel.app"  # Allows all subdomains of vercel.app
 ]
-
-
 
 # Application definition
 
