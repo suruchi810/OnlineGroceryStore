@@ -26,6 +26,9 @@ SECRET_KEY = 'django-insecure-%eqpafjo=+-5#2&%@xj6-ch)%v-gy&_8-x=ibzm2khx8#o9#n0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+ALLOWED_HOSTS = ['*']
+
+
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
@@ -92,10 +95,25 @@ WSGI_APPLICATION = 'grocery.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': 'ep-weathered-fog-ad4sv42i-pooler.c-2.us-east-1.aws.neon.tech',
+        'PORT': '5432', 
+        'NAME': 'neondb',
+        'USER': 'neondb_owner',
+        'PASSWORD': 'npg_liKXpdvr85be',
+        'OPTIONS': {
+            'sslmode': 'require',
+            'sslrootcert': '', 
+        }
     }
 }
 
@@ -141,5 +159,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATICFILES_DIRS = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
