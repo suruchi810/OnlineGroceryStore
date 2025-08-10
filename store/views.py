@@ -201,7 +201,7 @@ class LowStockAlertView(APIView):
                 status=status.HTTP_403_FORBIDDEN
             )
 
-        threshold = 150  # Hardcoded low stock limit
+        threshold = 10  # Hardcoded low stock limit
         low_stock_products = Product.objects.filter(stock__lte=threshold)
 
         data = [
@@ -209,3 +209,4 @@ class LowStockAlertView(APIView):
             for p in low_stock_products
         ]
         return Response({"low_stock_products": data})
+
