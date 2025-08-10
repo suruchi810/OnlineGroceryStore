@@ -89,4 +89,5 @@ It allows customers to browse and purchase products while store managers manage 
 | GET    | `/api/sales-report/?sort=least_sold`                         | View least sold products in sales report     |
 | GET    | `/api/sales-report/?category={category_slug}&sort=most_sold` | View most sold products filtered by category |
 | GET    | `/api/sales-report/?category={category_slug}&sort=least_sold`| View least sold products filtered by category|
+| GET    | `/api/low-stock-alert/`                                      | View low-stock products (10<=)               |
 
