@@ -190,3 +190,22 @@ class SalesReport(APIView):
         data = [{"product": p.name, "sold": p.total_sold, "stock": p.stock, "category": p.category.name if p.category else None} for p in qs]
         return Response(data)
 
+class LowStockAlertView(APIView):
+    permission_classes = [IsAuthenticated]  # must be logged in
+
+    def get(self, request):
+        # Allow only store managers
+        if request.user.role != 'manager':
+            return Response(
+                {"detail": "You do not have permission to view this."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        threshold = 150  # Hardcoded low stock limit
+        low_stock_products = Product.objects.filter(stock__lte=threshold)
+
+        data = [
+            {"name": p.name, "stock": p.stock}
+            for p in low_stock_products
+        ]
+        return Response({"low_stock_products": data})
