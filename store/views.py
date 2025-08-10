@@ -131,25 +131,47 @@ class WishlistViewSet(viewsets.GenericViewSet):
 @permission_classes([IsAuthenticated])
 def checkout(request):
     user = request.user
-    items = CartItem.objects.select_for_update().filter(user=user).select_related("product")
-    if not items.exists():
-        return Response({"detail":"Cart is empty"}, status=400)
 
-    with transaction.atomic():
-        total = Decimal("0.00")
-        order = Order.objects.create(user=user)
-        for item in items:
-            p = item.product
-            if p.stock < item.quantity:
-                return Response({"detail": f"Insufficient stock for {p.name}"}, status=400)
-            p.stock -= item.quantity
-            p.total_sold += item.quantity
-            p.save()
-            OrderItem.objects.create(order=order, product=p, quantity=item.quantity, price_at_purchase=p.price)
-            total += p.price * item.quantity
-        order.total_amount = total
-        order.save()
-        items.delete()
+    # Quick empty-cart check before transaction
+    if not CartItem.objects.filter(user=user).exists():
+        return Response({"detail": "Cart is empty"}, status=400)
+
+    try:
+        with transaction.atomic():
+            # Lock cart items *inside* the transaction
+            items = CartItem.objects.select_for_update().filter(user=user).select_related("product")
+
+            # Validate stock first to avoid partial commits
+            for item in items:
+                if item.product.stock < item.quantity:
+                    raise ValueError(f"Insufficient stock for {item.product.name}")
+
+            # If validation passes, process the order
+            total = Decimal("0.00")
+            order = Order.objects.create(user=user)
+
+            for item in items:
+                p = item.product
+                p.stock -= item.quantity
+                p.total_sold += item.quantity
+                p.save()
+
+                OrderItem.objects.create(
+                    order=order,
+                    product=p,
+                    quantity=item.quantity,
+                    price_at_purchase=p.price
+                )
+
+                total += p.price * item.quantity
+
+            order.total_amount = total
+            order.save()
+            items.delete()
+
+    except ValueError as e:
+        return Response({"detail": str(e)}, status=400)
+
     return Response(OrderSerializer(order).data, status=201)
 
 class SalesReport(APIView):
