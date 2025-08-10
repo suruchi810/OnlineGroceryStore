@@ -33,7 +33,7 @@ It allows customers to browse and purchase products while store managers manage 
 ## 🏗 Tech Stack
 - **Backend Framework:** Django, Django REST Framework
 - **Authentication:** JWT via `djangorestframework-simplejwt`
-- **Database:** SQLite (development) 
+- **Database:** PostgreSQL database (Neon)
 - **API Documentation:** via Postman collection
 ---
 
@@ -41,8 +41,7 @@ It allows customers to browse and purchase products while store managers manage 
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/yourusername/online-grocery-store-backend.git
-   cd online-grocery-store-backend
+   https://github.com/suruchi810/OnlineGroceryStore.git
    ```
 
 2. **Create & Activate Virtual Environment**
