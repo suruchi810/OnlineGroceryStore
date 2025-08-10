@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from store.views import CategoryViewSet, ProductViewSet, CartViewSet, WishlistViewSet, checkout, SalesReport
+from store.views import CategoryViewSet, ProductViewSet, CartViewSet, WishlistViewSet, checkout, SalesReport, LowStockAlertView
 from users.views import RegisterView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
@@ -33,6 +33,7 @@ urlpatterns = [
      path("api/", include(router.urls)),
     path("api/checkout/", checkout, name="checkout"),
     path("api/sales-report/", SalesReport.as_view(), name="sales-report"),
+    path('api/low-stock-alert/', LowStockAlertView.as_view(), name='low-stock-alert'),
     path("api/auth/register/", RegisterView.as_view(), name="register"),
     path("api/auth/login/", TokenObtainPairView.as_view(), name="login"),
     path("api/auth/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
