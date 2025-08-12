@@ -15,21 +15,6 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField(default=0)
     image_url = models.URLField(blank=True, null=True)
-    total_sold = models.PositiveIntegerField(default=0) 
-
-    def save(self, *args, **kwargs):
-        self.name = self.name.strip().lower()
-        super().save(*args, **kwargs) 
-
-    def __str__(self):
-        return self.name
-
-class Product(models.Model):
-    name = models.CharField(max_length=200, unique=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name="products")
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    stock = models.PositiveIntegerField(default=0)
-    image_url = models.URLField(blank=True, null=True)
     total_sold = models.PositiveIntegerField(default=0)
 
     def save(self, *args, **kwargs):
@@ -65,3 +50,4 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     quantity = models.PositiveIntegerField()
     price_at_purchase = models.DecimalField(max_digits=10, decimal_places=2)
+
